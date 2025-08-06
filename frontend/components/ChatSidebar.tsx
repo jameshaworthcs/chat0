@@ -1,21 +1,29 @@
 import {
   Sidebar,
-  SidebarHeader,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
+  SidebarHeader,
   SidebarMenu,
   SidebarMenuItem,
-  SidebarFooter,
   SidebarTrigger,
-} from '@/frontend/components/ui/sidebar';
-import { Button, buttonVariants } from './ui/button';
-import { deleteThread, getThreads } from '@/frontend/dexie/queries';
-import { useLiveQuery } from 'dexie-react-hooks';
-import { Link, useNavigate, useParams } from 'react-router';
-import { X } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { memo, useEffect } from 'react';
+} from "@/frontend/components/ui/sidebar";
+import { deleteThread, getThreads } from "@/frontend/dexie/queries";
+import { cn } from "@/lib/utils";
+import { useLiveQuery } from "dexie-react-hooks";
+import { X } from "lucide-react";
+import { memo, useEffect } from "react";
+import { Link, useNavigate, useParams } from "react-router";
+import APIKeyForm from "./APIKeyForm";
+import { Button, buttonVariants } from "./ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+  DialogTrigger,
+} from "./ui/dialog";
 
 export default function ChatSidebar() {
   const { id } = useParams();
@@ -24,14 +32,18 @@ export default function ChatSidebar() {
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.shiftKey && e.key.toLowerCase() === 'o') {
+      if (
+        (e.metaKey || e.ctrlKey) &&
+        e.shiftKey &&
+        e.key.toLowerCase() === "o"
+      ) {
         e.preventDefault();
-        navigate('/chat');
+        navigate("/chat");
       }
     };
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
-  }, []);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [navigate]);
 
   return (
     <Sidebar>
@@ -46,8 +58,8 @@ export default function ChatSidebar() {
                     <SidebarMenuItem key={thread.id}>
                       <div
                         className={cn(
-                          'cursor-pointer group/thread h-9 flex items-center px-2 py-1 rounded-[8px] overflow-hidden w-full hover:bg-secondary',
-                          id === thread.id && 'bg-secondary'
+                          "cursor-pointer group/thread h-9 flex items-center px-2 py-1 rounded-[8px] overflow-hidden w-full hover:bg-secondary",
+                          id === thread.id && "bg-secondary"
                         )}
                         onClick={() => {
                           if (id === thread.id) {
@@ -94,8 +106,8 @@ function PureHeader() {
       <Link
         to="/chat"
         className={buttonVariants({
-          variant: 'default',
-          className: 'w-full',
+          variant: "default",
+          className: "w-full",
         })}
       >
         New Chat
@@ -107,19 +119,24 @@ function PureHeader() {
 const Header = memo(PureHeader);
 
 const PureFooter = () => {
-  const { id: chatId } = useParams();
-
   return (
     <SidebarFooter>
-      <Link
-        to={{
-          pathname: "/settings",
-          search: chatId ? `?from=${encodeURIComponent(chatId)}` : "",
-        }}
-        className={buttonVariants({ variant: "outline" })}
-      >
-        Settings
-      </Link>
+      <Dialog>
+        <DialogTrigger asChild>
+          <Button variant="outline">Settings</Button>
+        </DialogTrigger>
+        <DialogContent>
+          <DialogTitle className="space-y-1">
+            <div className="flex items-center gap-1">
+              <h3>Add Your API Keys To Start Chatting</h3>
+            </div>
+            <DialogDescription>
+              Keys are stored locally in your browser.
+            </DialogDescription>
+          </DialogTitle>
+          <APIKeyForm />
+        </DialogContent>
+      </Dialog>
     </SidebarFooter>
   );
 };
