@@ -126,14 +126,12 @@ const PureFooter = () => {
           <Button variant="outline">Settings</Button>
         </DialogTrigger>
         <DialogContent>
-          <DialogTitle className="space-y-1">
-            <div className="flex items-center gap-1">
-              <h3>Add Your API Keys To Start Chatting</h3>
-            </div>
+          <div className="flex flex-col gap-1 md:gap-1.5">
+            <DialogTitle>Add Your API Keys To Start Chatting</DialogTitle>
             <DialogDescription>
               Keys are stored locally in your browser.
             </DialogDescription>
-          </DialogTitle>
+          </div>
           <APIKeyForm />
         </DialogContent>
       </Dialog>

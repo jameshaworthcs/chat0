@@ -11,7 +11,7 @@ const Landing = () => {
 
   const startAnimateH1 = async () => {
     await animate(
-      "h1",
+      ".title",
       {
         opacity: 1,
         filter: "blur(0px)",
@@ -27,14 +27,14 @@ const Landing = () => {
 
   const startAnimateH2 = async () => {
     await animate(
-      "h2",
+      ".description",
       {
         opacity: 1,
         filter: "blur(0px)",
         y: 0,
       },
       {
-        duration: 0.5,
+        duration: 0.4,
         ease: "easeInOut",
         delay: stagger(0.03),
       }
@@ -43,14 +43,14 @@ const Landing = () => {
 
   const startAnimateSpan = async () => {
     await animate(
-      "span",
+      ".instruction",
       {
         opacity: 1,
         filter: "blur(0px)",
         y: 0,
       },
       {
-        duration: 1,
+        duration: 0.5,
         ease: "easeInOut",
         delay: stagger(0.03),
       }
@@ -75,8 +75,8 @@ const Landing = () => {
         pathLength: 1,
       },
       {
-        delay: 0.08,
-        duration: 0.8,
+        delay: 0.1,
+        duration: 0.5,
         ease: "easeInOut",
       }
     );
@@ -88,24 +88,25 @@ const Landing = () => {
     startAnimateSpan();
     starteAnimateSvg();
     starteAnimatePathLine();
-  });
+  }, []);
 
   return (
     <div ref={scope} className="flex flex-col items-center gap-1 text-center">
       <div className="flex items-center max-w-sm md:max-w-3xl text-5xl md:text-8xl font-semibold mb-1 lg:mb-2">
+        <h1 className="sr-only">{h1Text}</h1>
         {h1Text.split("").map((word, index) => {
           return (
-            <motion.h1
+            <motion.span
               style={{
                 opacity: 0,
                 filter: "blur(10px)",
                 y: 10,
               }}
               key={word + index}
-              className="inline-block"
+              className="inline-block title"
             >
               {word}
-            </motion.h1>
+            </motion.span>
           );
         })}
         <motion.svg
@@ -175,19 +176,20 @@ const Landing = () => {
         </motion.svg>
       </div>
       <div className="max-w-sm md:max-w-3xl">
+        <h2 className="sr-only">{h2Text}</h2>
         {h2Text.split(" ").map((word, index) => {
           return (
-            <motion.h2
+            <motion.span
               style={{
                 opacity: 0,
                 filter: "blur(10px)",
                 y: 10,
               }}
               key={word + index}
-              className="inline-block text-sm md:text-xl text-foreground"
+              className="inline-block text-sm md:text-xl text-foreground description"
             >
               {word}&nbsp;
-            </motion.h2>
+            </motion.span>
           );
         })}
       </div>
@@ -202,7 +204,7 @@ const Landing = () => {
               }}
               key={word + index}
               className={cn(
-                "text-xs md:text-lg font-light text-foreground inline-block"
+                "text-xs md:text-lg font-light text-foreground inline-block instruction"
               )}
             >
               {word === "Settings" ? (
