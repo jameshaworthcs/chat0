@@ -56,7 +56,7 @@ const Form = () => {
   );
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
+    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">
       <ApiKeyField
         id="google"
         label="Google API Key"
