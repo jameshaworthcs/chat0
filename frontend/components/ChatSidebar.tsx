@@ -1,21 +1,23 @@
 import {
   Sidebar,
-  SidebarHeader,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
+  SidebarHeader,
   SidebarMenu,
   SidebarMenuItem,
-  SidebarFooter,
   SidebarTrigger,
 } from '@/frontend/components/ui/sidebar';
-import { Button, buttonVariants } from './ui/button';
 import { deleteThread, getThreads } from '@/frontend/dexie/queries';
-import { useLiveQuery } from 'dexie-react-hooks';
-import { Link, useNavigate, useParams } from 'react-router';
-import { X } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useLiveQuery } from 'dexie-react-hooks';
+import { X } from 'lucide-react';
 import { memo, useEffect } from 'react';
+import { Link, useNavigate, useParams } from 'react-router';
+import APIKeyForm from './APIKeyForm';
+import { Button, buttonVariants } from './ui/button';
+import { Dialog, DialogContent, DialogTitle, DialogTrigger } from './ui/dialog';
 
 export default function ChatSidebar() {
   const { id } = useParams();
@@ -24,20 +26,24 @@ export default function ChatSidebar() {
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.shiftKey && e.key.toLowerCase() === 'o') {
+      if (
+        (e.metaKey || e.ctrlKey) &&
+        e.shiftKey &&
+        e.key.toLowerCase() === 'o'
+      ) {
         e.preventDefault();
         navigate('/chat');
       }
     };
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
-  }, []);
+  }, [navigate]);
 
   return (
     <Sidebar>
-      <div className="flex flex-col h-full p-2">
+      <div className='flex flex-col h-full p-2'>
         <Header />
-        <SidebarContent className="no-scrollbar">
+        <SidebarContent className='no-scrollbar'>
           <SidebarGroup>
             <SidebarGroupContent>
               <SidebarMenu>
@@ -56,11 +62,11 @@ export default function ChatSidebar() {
                           navigate(`/chat/${thread.id}`);
                         }}
                       >
-                        <span className="truncate block">{thread.title}</span>
+                        <span className='truncate block'>{thread.title}</span>
                         <Button
-                          variant="ghost"
-                          size="icon"
-                          className="hidden group-hover/thread:flex ml-auto h-7 w-7"
+                          variant='ghost'
+                          size='icon'
+                          className='hidden group-hover/thread:flex ml-auto h-7 w-7'
                           onClick={async (event) => {
                             event.preventDefault();
                             event.stopPropagation();
@@ -86,13 +92,13 @@ export default function ChatSidebar() {
 
 function PureHeader() {
   return (
-    <SidebarHeader className="flex justify-between items-center gap-4 relative">
-      <SidebarTrigger className="absolute right-1 top-2.5" />
-      <h1 className="text-2xl font-bold">
-        Chat<span className="">0</span>
+    <SidebarHeader className='flex justify-between items-center gap-4 relative'>
+      <SidebarTrigger className='absolute right-1 top-2.5' />
+      <h1 className='text-2xl font-bold'>
+        Chat<span className=''>0</span>
       </h1>
       <Link
-        to="/chat"
+        to='/chat'
         className={buttonVariants({
           variant: 'default',
           className: 'w-full',
@@ -107,19 +113,17 @@ function PureHeader() {
 const Header = memo(PureHeader);
 
 const PureFooter = () => {
-  const { id: chatId } = useParams();
-
   return (
     <SidebarFooter>
-      <Link
-        to={{
-          pathname: "/settings",
-          search: chatId ? `?from=${encodeURIComponent(chatId)}` : "",
-        }}
-        className={buttonVariants({ variant: "outline" })}
-      >
-        Settings
-      </Link>
+      <Dialog>
+        <DialogTrigger asChild>
+          <Button variant='outline'>Settings</Button>
+        </DialogTrigger>
+        <DialogTitle />
+        <DialogContent className='p-0'>
+          <APIKeyForm />
+        </DialogContent>
+      </Dialog>
     </SidebarFooter>
   );
 };
