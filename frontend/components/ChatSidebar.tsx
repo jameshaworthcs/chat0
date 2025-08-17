@@ -17,13 +17,7 @@ import { memo, useEffect } from "react";
 import { Link, useNavigate, useParams } from "react-router";
 import APIKeyForm from "./APIKeyForm";
 import { Button, buttonVariants } from "./ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogTitle,
-  DialogTrigger,
-} from "./ui/dialog";
+import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "./ui/dialog";
 
 export default function ChatSidebar() {
   const { id } = useParams();
@@ -125,13 +119,8 @@ const PureFooter = () => {
         <DialogTrigger asChild>
           <Button variant="outline">Settings</Button>
         </DialogTrigger>
-        <DialogContent>
-          <div className="flex flex-col gap-1 md:gap-1.5">
-            <DialogTitle>Add Your API Keys To Start Chatting</DialogTitle>
-            <DialogDescription>
-              Keys are stored locally in your browser.
-            </DialogDescription>
-          </div>
+        <DialogTitle />
+        <DialogContent className="p-0">
           <APIKeyForm />
         </DialogContent>
       </Dialog>
