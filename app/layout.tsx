@@ -16,6 +16,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://chat0.space"),
   title: {
     default: 'Chat0',
     template: '%s - Chat0',
